@@ -3,6 +3,7 @@ const body = document.querySelector('BODY');
 const page = body.dataset.location;
 const productHeader = document.querySelector('.productHeader');
 
+// Fetch all products and throw error when not resolved
 function getProducts() {
     
     fetch(`https://fakestoreapi.com/${page}`)
@@ -10,14 +11,15 @@ function getProducts() {
     .then(data => showProducts(data))
     .catch(error => {
         console.error("There was a problem loading the products", error);
-        handleError();
+        producten.innerHTML = 'It looks like something went wrong while loading the products :(';
     })
 }
 
+// Show products on the page and add listeners for the GO buttons
 function showProducts(products) {
     products.map(product => producten.innerHTML += `
         <div class="product" >
-            <div class="imageHolder">
+            <div data-id="${product.id}" class="imageHolder">
                 <img src="${product.image}" alt="product">
                 <button data-id="${product.id}" class="addButton">GO</button>
             </div>
@@ -29,9 +31,8 @@ function showProducts(products) {
    `)
    addListener();
 }
-function handleError() {
-    producten.innerHTML = 'It looks like something went wrong while loading the products :('
-}
+
+// Check the page. Show the products based on location
 if (page !== 'carts') {
     getProducts();
 } else {
@@ -54,9 +55,11 @@ if (page !== 'carts') {
                     </div>
                 </div>  
                 `})
+                .catch(error => console.error('Er is iets misgegaan', error))
         });
     }
     
+    // Empty the local storage and refresh the page
     const clearCart = document.querySelector('.clearCart');
     clearCart.addEventListener('click', () => {
         localStorage.clear();
@@ -64,7 +67,8 @@ if (page !== 'carts') {
     })
 }
 
-// Show single product
+/* Show single product on the page when a user clicks a GO button */
+// Fetch data for a single product then call function with the data
 function getSingleProduct(id) {
     fetch(`https://fakestoreapi.com/products/${id}`)
             .then(res => res.json())
@@ -77,9 +81,8 @@ const promoSection = document.querySelector('.promoSection');
 
 function showSingleProduct(product) {
     
-    singleProductPage.style.display = "block";
     scroll();
-    
+    singleProductPage.style.display = "block";
     singleProductPage.innerHTML = `
         <button class="terug">Sluit</button>
         <div class="singleProduct" >
@@ -104,16 +107,23 @@ function showSingleProduct(product) {
             </div>
         </div>     
     `
+
+    // Add eventListener to the close button
     const terug = document.querySelector('.terug');
     terug.addEventListener('click', () => {
         singleProductPage.style.display = "none"
     })
 
+    // Add eventListener to the add to cart button and change text and color
     const addCartButton = document.querySelector('.addCart');
     addCartButton.addEventListener('click', () => {
         addCart(addCartButton.dataset.id);
+        addCartButton.style.backgroundColor = "green";
+        addCartButton.textContent = "Toegevoegd aan winkelwagen"
     })
 }
+
+// Add eventListeners to the GO Buttons and images. Show selected product from dataset id
 function addListener() {
     const addButtons = document.querySelectorAll('.addButton');
     for (let i = 0; i < addButtons.length; i++) {
@@ -121,9 +131,17 @@ function addListener() {
             getSingleProduct(addButtons[i].dataset.id)
         })
     }
-}
-function scroll() {
+    const imageHolder = document.querySelectorAll('.imageHolder');
+    for (let i = 0; i < imageHolder.length; i++) {
+        imageHolder[i].addEventListener('click', () => {
+            getSingleProduct(imageHolder[i].dataset.id)
+        })
+    }
     
+}
+
+// Function that scrolls to the selected product
+function scroll() {
     if (page === 'products') {
         const offset = promoSection.offsetHeight;
         window.scrollTo(0, offset);
@@ -132,6 +150,7 @@ function scroll() {
         window.scrollTo(0,0)
     }
 }
+
 // HamburgerMenu
 const hamburgerMenu = document.querySelector('.hamburgerMenu');
 const hamburgerIcon = document.querySelector('.menuIcon');
@@ -141,7 +160,7 @@ hamburgerIcon.addEventListener('click', () => {
     search.classList.add('hideSearch');
 })
 
-// Searcharea and function
+// Hide the search area and search for products
 const search = document.querySelector('.searchArea');
 const searchIcon = document.querySelector('.searchIcon');
 const clearIcon = document.querySelector('.clear');
@@ -169,22 +188,19 @@ function handleSearch(searchString) {
     });
 }
 
-// Go button
-const ontdek = document.querySelector('.ontdekButton');
+// When to go or ontdek button in the promo is clicked, show products
 if (page === 'products') {
+    const goButton = document.querySelector('.goButton');
+    const ontdek = document.querySelector('.ontdekButton');
     ontdek.addEventListener('click', () => {
         productHeader.scrollIntoView();
     })
-}
-
-if (page === "products") {
-    const goButton = document.querySelector('.goButton');
     goButton.addEventListener('click', () => {
         getSingleProduct(1);
     });
 }
 
-// Add to Cart 
+// Create a cart in Local storage, get cart from local storage and update it with a product
 function addCart(id) {
    
     if (window.localStorage.length === 0) {
@@ -194,7 +210,6 @@ function addCart(id) {
         if(!updateArray.includes(id)) {
             updateArray.push(id);
         }
-        localStorage.setItem("cart", JSON.stringify(updateArray));
-        console.log(localStorage.cart);  
+        localStorage.setItem("cart", JSON.stringify(updateArray)); 
     }
 }

@@ -201,7 +201,7 @@ button:hover {
 .producten {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
     padding-bottom: 1.5rem;
     text-overflow: ellipsis;
 }
@@ -213,7 +213,7 @@ button:hover {
     font-size: .9rem;
 }
 .imageHolder {
-    border: 1px solid black;
+    border: 1px solid rgb(226, 226, 226);
     height: 82%;
     display: flex;
     justify-content: center;
@@ -231,6 +231,7 @@ button:hover {
 }
 .imageHolder img:hover {
     scale: 1.025;
+    cursor: pointer;
 }
 .productDescription {
     height: 18%;
@@ -292,6 +293,7 @@ footer {
 }
 .addCart {
     width: 100%;
+    height: 2.5rem;
 }
 .addCart,
 .terug,
@@ -336,13 +338,16 @@ footer {
     }
     .promoContent {
         height: 50vw;
+        width: 1200px;
+        margin: 0 auto;
+        max-width: 1200px;
         display: grid;
         align-items: center;
-        grid-template-columns: 2fr 1fr;
+        grid-template-columns: 1.5fr 1fr;
     }
     .promoHolder {
         height: calc(50vw - 3rem);
-        width: calc(50vw - 3rem);
+        width: calc(100%);
     }
     .promoOntdek {
         background-image: url("../images/pencils.jpg");
@@ -370,6 +375,7 @@ footer {
     }
     .producten {
         grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5rem;
     }
     .singleProduct {
         display: grid;
@@ -410,7 +416,7 @@ footer {
         height: calc(50vh - 4rem);
     }
     .productSection {
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
     }
     .mainNav {
