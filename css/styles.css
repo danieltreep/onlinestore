@@ -230,7 +230,6 @@ button:hover {
     transition: .3s;
 }
 .imageHolder img:hover {
-    scale: 1.025;
     cursor: pointer;
 }
 .productDescription {

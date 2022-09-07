@@ -38,7 +38,7 @@ if (page !== 'carts') {
 } else {
     const cart = JSON.parse(localStorage.getItem('cart'));
     
-    if (localStorage.length === 0) {
+    if (!localStorage.cart) {
         producten.innerHTML = "Uw winkelwagen is leeg";
     } else {
         cart.map(id => {
@@ -202,8 +202,8 @@ if (page === 'products') {
 
 // Create a cart in Local storage, get cart from local storage and update it with a product
 function addCart(id) {
-   
-    if (window.localStorage.length === 0) {
+// localStorage.clear();
+    if (!window.localStorage.cart) {
         localStorage.setItem("cart", JSON.stringify([id]));
     } else {
         let updateArray = JSON.parse(localStorage.getItem('cart'));
